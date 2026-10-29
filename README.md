@@ -1,5 +1,7 @@
 # Retro TV
 
+**Watch it: [retro-tv-live.vercel.app](https://retro-tv-live.vercel.app)**
+
 A television set that behaves the way broadcast television used to. There is no
 library to browse and nothing to queue up: you turn it on, and whatever is
 scheduled is already halfway through.
@@ -350,9 +352,15 @@ whichever dial has focus rather than falling through to the channel shortcut.
 
 ## Deployment
 
-Hosted on **Vercel**, which serves the site from the domain root. `vercel.json`
-sets the build command, enables clean URLs and sets cache headers: hashed assets
-are immutable, catalogue JSON is revalidated hourly at the edge.
+Hosted on **Vercel** at
+[retro-tv-live.vercel.app](https://retro-tv-live.vercel.app), served from the
+domain root. `vercel.json` sets the build command, enables clean URLs and sets
+cache headers: hashed assets are immutable, catalogue JSON is revalidated
+hourly at the edge.
+
+`.vercelignore` matters more than it looks. Vercel uploads the working
+directory and does not read `.gitignore`, so without it a CLI deploy tries to
+send the whole response cache — twenty thousand files — and is rejected.
 
 **First-time setup**
 
@@ -363,6 +371,9 @@ are immutable, catalogue JSON is revalidated hourly at the edge.
    preview URLs.
 4. Edit `repoUrl` in `config/site.config.json` so the *Suggest a channel* links
    point at your repository rather than the placeholder.
+5. Set `contact` in `config/channels.config.json` to something that identifies
+   you to archive.org. A repository URL does the job; a personal address in a
+   public repo does not need to.
 
 No environment variables are needed. `BASE_PATH` exists for hosts that serve
 from a subdirectory (GitHub Pages, say) and should be left unset on Vercel.
