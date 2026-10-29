@@ -197,7 +197,7 @@ channel, so check there after a build.
 
 ## Keeping unwanted material off the air
 
-Three filters run during the build, configured at the top of
+Four filters run during the build, configured at the top of
 `config/channels.config.json`.
 
 **`maxYear`** is a ceiling for the whole dial (2005 by default). A channel may
@@ -216,9 +216,19 @@ description. A trailing asterisk makes a term a stem, so `sexual*` also catches
 fire on "advanced". The default list covers childbirth and medical-procedure
 films, sex-education and hygiene films, adult material and graphic violence.
 
+**`blockCollections`** drops an item that belongs to any of the named Archive
+collections, whatever the query asked for. This one is not optional padding: an
+Archive item sits in several collections at once, so a query naming one
+well-behaved collection still drags others in with it. `collection:"movie_trailers"`
+returned the whole of `sinema-trailers` — exploitation and softcore trailers,
+*Faces of Death* among them — and no amount of title matching would have caught
+them all, because the titles alone look like ordinary B-pictures. Blocking the
+collection is what works.
+
 ```jsonc
 "requireEnglish": true,
 "maxYear": 2005,
+"blockCollections": ["sinema-trailers", "adult_film"],
 "blockTerms": ["playboy", "nudist", "sexual*", "human birth", "xxx"]
 ```
 
@@ -228,6 +238,11 @@ slip through — if you spot one, add a term. And broad words cause collateral
 damage: `breast*` was in the list until it blocked "Chicken Breast
 Preparation". Prefer specific terms over general ones, and run `npm test`,
 which pins the known cases both ways.
+
+`tests/catalog-content.test.ts` checks the generated JSON itself rather than
+the builder: no item from a blocked collection, no title matching a block term,
+nothing past the year ceiling, no empty channel. The filters only run when
+somebody rebuilds, so this is what notices if a rebuild loses one.
 
 ## The catalogue builder
 

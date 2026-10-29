@@ -76,7 +76,56 @@
     "lynching",
     "atrocity",
     "atrocities",
-    "birth of a nation"
+    "birth of a nation",
+    "emanuelle",
+    "emmanuelle",
+    "ultra-vixen",
+    "vixens",
+    "de sade",
+    "justine",
+    "kitty and stud",
+    "maid in sweden",
+    "candy stripe nurses",
+    "girls for rent",
+    "barbed wire dolls",
+    "house of dolls",
+    "big bird cage",
+    "women in cages",
+    "99 women",
+    "black snake",
+    "h.o.t.s",
+    "sinful nuns",
+    "nympho*",
+    "sexploitation",
+    "orgy",
+    "orgie",
+    "strip tease",
+    "faces of death",
+    "cannibal",
+    "cannibals",
+    "mutilator",
+    "snuff film",
+    "gore",
+    "torture"
+  ],
+  "commercials": {
+    "sources": [
+      {
+        "collection": "classic_tv_commercials"
+      }
+    ],
+    "minDuration": 10,
+    "maxDuration": 120,
+    "maxItems": 500
+  },
+  "requireEnglish": true,
+  "blockCollections": [
+    "sinema-trailers",
+    "sinema",
+    "adult_film",
+    "adultvideo",
+    "eroticfilms",
+    "nudist_films"
   ],
   "channels": [
     {
@@ -439,16 +488,5 @@
       "maxYear": 1969,
       "maxItems": 700
     }
-  ],
-  "commercials": {
-    "sources": [
-      {
-        "collection": "classic_tv_commercials"
-      }
-    ],
-    "minDuration": 10,
-    "maxDuration": 120,
-    "maxItems": 500
-  },
-  "requireEnglish": true
+  ]
 }

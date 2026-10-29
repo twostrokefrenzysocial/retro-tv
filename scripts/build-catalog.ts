@@ -62,6 +62,8 @@ interface Config {
   contact: string;
   maxItems: number;
   alwaysAllow: string[];
+  /** Archive collections never to take anything from, at any year. */
+  blockCollections?: string[];
   /** Applied to every channel that does not set its own ceiling. */
   maxYear?: number;
   /** Titles, subjects or descriptions containing these are never included. */
@@ -171,6 +173,7 @@ interface SkipCounts {
   license: number;
   outOfEra: number;
   blocked: number;
+  blockedCollection: number;
 }
 
 interface BuildResult {
@@ -183,7 +186,7 @@ interface BuildResult {
 function emptySkips(): SkipCounts {
   return {
     notEnglish: 0, unplayableCodec: 0, noFile: 0, noDuration: 0, tooShort: 0, tooLong: 0,
-    error: 0, license: 0, outOfEra: 0, blocked: 0,
+    error: 0, license: 0, outOfEra: 0, blocked: 0, blockedCollection: 0,
   };
 }
 
@@ -203,6 +206,7 @@ async function collectItems(
     allowUnknownYear?: boolean;
     requireEnglish: boolean;
     blockTerms: string[];
+    blockCollections: string[];
   },
 ): Promise<BuildResult> {
   const skips = emptySkips();
@@ -266,6 +270,19 @@ async function collectItems(
       : collections
         ? [String(collections)]
         : [];
+    // An Archive item belongs to several collections at once, and a query
+    // naming one well-behaved collection still returns items that also sit in
+    // a disreputable one -- `collection:"movie_trailers"` brings back the
+    // whole of `sinema-trailers` with it. Checking every collection the item
+    // claims is the only reliable way to keep those off the dial.
+    const blockedCollection = collectionList.find((c) =>
+      opts.blockCollections.includes(c),
+    );
+    if (blockedCollection !== undefined) {
+      skips.blockedCollection += 1;
+      continue;
+    }
+
     const licenseurl = first(metadata['licenseurl'] as string | string[] | undefined);
     const allowed =
       isOpenLicense(licenseurl) || collectionList.some((c) => opts.alwaysAllow.includes(c));
@@ -350,6 +367,7 @@ function describeSkips(s: SkipCounts): string {
   if (s.tooLong) parts.push(`${s.tooLong} too long`);
   if (s.outOfEra) parts.push(`${s.outOfEra} wrong era`);
   if (s.blocked) parts.push(`${s.blocked} filtered`);
+  if (s.blockedCollection) parts.push(`${s.blockedCollection} blocked collection`);
   if (s.license) parts.push(`${s.license} license`);
   if (s.error) parts.push(`${s.error} errors`);
   return parts.length ? parts.join(', ') : '-';
@@ -397,6 +415,7 @@ async function main(): Promise<void> {
       maxYear: effectiveMaxYear,
       requireEnglish: config.requireEnglish !== false,
       blockTerms: config.blockTerms ?? [],
+      blockCollections: config.blockCollections ?? [],
     });
 
     const totalRuntime = result.items.reduce((sum, item) => sum + item.duration, 0);
@@ -461,6 +480,7 @@ async function main(): Promise<void> {
     allowUnknownYear: true,
     requireEnglish: config.requireEnglish !== false,
     blockTerms: config.blockTerms ?? [],
+    blockCollections: config.blockCollections ?? [],
   });
   await writeFile(
     join(outDir, 'commercials.json'),

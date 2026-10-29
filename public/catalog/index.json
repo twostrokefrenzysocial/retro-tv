@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T17:28:28.233Z",
+  "generatedAt": "2026-10-29T17:59:12.437Z",
   "epoch": "2026-01-01T00:00:00Z",
   "channels": [
     {
@@ -8,7 +8,7 @@
       "name": "Silent Screen",
       "description": "The silent era, title cards and all",
       "itemCount": 400,
-      "totalRuntime": 983836,
+      "totalRuntime": 983670,
       "commercialBreaks": false,
       "minYear": 1890,
       "maxYear": 1929
@@ -19,7 +19,7 @@
       "name": "Picture Palace",
       "description": "Features from the thirties and forties",
       "itemCount": 400,
-      "totalRuntime": 1703335,
+      "totalRuntime": 1703010,
       "commercialBreaks": true,
       "minYear": 1930,
       "maxYear": 1949
@@ -29,8 +29,8 @@
       "slug": "saturday-morning",
       "name": "Saturday Morning",
       "description": "Cartoons and animated shorts, pre-1970",
-      "itemCount": 396,
-      "totalRuntime": 178821,
+      "itemCount": 393,
+      "totalRuntime": 177638,
       "commercialBreaks": true,
       "minYear": 1920,
       "maxYear": 1969
@@ -51,8 +51,8 @@
       "slug": "atomic-age",
       "name": "Atomic Age",
       "description": "Fifties and sixties science fiction and horror",
-      "itemCount": 193,
-      "totalRuntime": 941581,
+      "itemCount": 189,
+      "totalRuntime": 923105,
       "commercialBreaks": true,
       "minYear": 1945,
       "maxYear": 1969
@@ -74,7 +74,7 @@
       "name": "Prime Time",
       "description": "Television from the seventies and eighties",
       "itemCount": 400,
-      "totalRuntime": 823002,
+      "totalRuntime": 824344,
       "commercialBreaks": true,
       "minYear": 1970,
       "maxYear": 1989
@@ -85,7 +85,7 @@
       "name": "Feature Presentation",
       "description": "Features from the fifties to the seventies",
       "itemCount": 400,
-      "totalRuntime": 1996876,
+      "totalRuntime": 1995821,
       "commercialBreaks": true,
       "minYear": 1950,
       "maxYear": 1979
@@ -95,8 +95,8 @@
       "slug": "drive-in",
       "name": "Drive-In",
       "description": "Seventies and eighties horror and science fiction",
-      "itemCount": 175,
-      "totalRuntime": 935825,
+      "itemCount": 168,
+      "totalRuntime": 897660,
       "commercialBreaks": true,
       "minYear": 1970,
       "maxYear": 1989
@@ -161,7 +161,7 @@
       "name": "Case Files",
       "description": "Mysteries, detectives and crime pictures",
       "itemCount": 400,
-      "totalRuntime": 1751922,
+      "totalRuntime": 1752509,
       "commercialBreaks": true,
       "minYear": 1930,
       "maxYear": 1969
@@ -172,7 +172,7 @@
       "name": "Coming Attractions",
       "description": "Nothing but trailers, back to back",
       "itemCount": 1200,
-      "totalRuntime": 157393,
+      "totalRuntime": 154303,
       "commercialBreaks": false,
       "minYear": 1920,
       "maxYear": 1989
@@ -194,7 +194,7 @@
       "name": "Laugh Track",
       "description": "Comedies, shorts and slapstick",
       "itemCount": 400,
-      "totalRuntime": 1445263,
+      "totalRuntime": 1442121,
       "commercialBreaks": true,
       "minYear": 1900,
       "maxYear": 1989
@@ -204,8 +204,8 @@
       "slug": "high-adventure",
       "name": "High Adventure",
       "description": "Jungles, pirates, swashbucklers and lost worlds",
-      "itemCount": 275,
-      "totalRuntime": 1112195,
+      "itemCount": 273,
+      "totalRuntime": 1103794,
       "commercialBreaks": true,
       "minYear": 1930,
       "maxYear": 1969
@@ -216,7 +216,7 @@
       "name": "Short Reel",
       "description": "Short films, one after another",
       "itemCount": 600,
-      "totalRuntime": 592969,
+      "totalRuntime": 593310,
       "commercialBreaks": true,
       "minYear": 1900,
       "maxYear": 1989
