@@ -1,0 +1,291 @@
+/*
+ * Programme guide, after the cable preview channels of the early nineties:
+ * a deep blue field, a bright channel column, white and yellow lettering.
+ * Original design -- no real network names, logos or colour marks.
+ */
+
+/*
+ * The display value MUST be scoped to [open]. An author rule of
+ * `display: flex` on the element itself overrides the user agent's
+ * `dialog:not([open]) { display: none }`, which leaves the guide on screen
+ * after it has closed -- covering the television with a panel that no
+ * longer responds to anything.
+ */
+.guide[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.guide {
+  width: min(78rem, calc(100vw - 1.5rem));
+  height: min(46rem, calc(100vh - 1.5rem));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 2px solid #4a6fd8;
+  border-radius: 6px;
+  background: #020a3c;
+  color: #fff;
+  font-family: "VT323", ui-monospace, "Courier New", monospace;
+  overflow: hidden;
+}
+
+.guide::backdrop { background: rgba(0, 0, 0, 0.8); }
+
+/* -------------------------------------------------------------- header -- */
+
+.guide-head {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  background: linear-gradient(#14256e, #091652);
+  border-bottom: 2px solid #4a6fd8;
+}
+
+.guide-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 11rem;
+  flex: 0 0 11rem;
+  padding: 10px 12px;
+  color: #ffd84a;
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  border-right: 2px solid #4a6fd8;
+}
+
+.guide-brand-mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, #ffd84a 50%, #6cff6c 50%);
+}
+
+.guide-times-wrap { flex: 1 1 auto; overflow: hidden; }
+
+.guide-times { display: flex; height: 100%; }
+
+.guide-time {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px;
+  color: #ffd84a;
+  font-size: 1.3rem;
+  border-left: 1px solid rgba(120, 160, 255, 0.35);
+}
+
+.guide-time:first-child { border-left: 0; }
+
+.guide-close {
+  flex: 0 0 auto;
+  width: 46px;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid #4a6fd8;
+  color: #cfe0ff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.guide-close:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+/* ---------------------------------------------------------------- body -- */
+
+.guide-body { position: relative; flex: 1 1 auto; min-height: 0; }
+
+.guide-rows {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #4a6fd8 #020a3c;
+}
+
+.guide-row {
+  display: flex;
+  align-items: stretch;
+  min-height: 56px;
+  border-bottom: 1px solid rgba(90, 130, 230, 0.3);
+}
+
+.guide-row.is-tuned .guide-channel { background: linear-gradient(#2a50c8, #1a3a9e); }
+
+/* The bright channel column down the left. */
+.guide-channel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 11rem;
+  flex: 0 0 11rem;
+  padding: 6px 12px;
+  background: linear-gradient(#10226a, #0a1750);
+  border-right: 2px solid #4a6fd8;
+  overflow: hidden;
+}
+
+.guide-channel-number {
+  flex: 0 0 auto;
+  min-width: 1.9rem;
+  color: #ffd84a;
+  font-size: 1.85rem;
+  line-height: 1;
+  text-align: right;
+}
+
+.guide-channel-name {
+  color: #dce8ff;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------- programmes -- */
+
+.guide-track { position: relative; flex: 1 1 auto; }
+
+.guide-program {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background: #11277f;
+  border: 1px solid #3a5fc0;
+  border-radius: 3px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.2rem;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.guide-program-title {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guide-program:hover { background: #1b3aa8; }
+
+.guide-program.is-live {
+  background: #1d3fb0;
+  border-color: #ffd84a;
+  color: #ffd84a;
+}
+
+.guide-program:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+  z-index: 2;
+}
+
+/* The line marking the present moment. */
+.guide-now {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: 11rem;
+  background: #ff5a5a;
+  box-shadow: 0 0 8px rgba(255, 90, 90, 0.85);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.guide-now::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -4px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid #ff5a5a;
+}
+
+/* ------------------------------------------------------------- details -- */
+
+.guide-details {
+  flex: 0 0 auto;
+  padding: 10px 16px 12px;
+  background: #0a1750;
+  border-top: 2px solid #4a6fd8;
+}
+
+.guide-details h3 {
+  margin: 0;
+  color: #ffd84a;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.guide-details-meta {
+  margin: 2px 0 4px;
+  color: #cfe0ff;
+  font-size: 1.05rem;
+}
+
+.guide-details-link { color: #6cff6c; font-size: 1.05rem; }
+
+.guide-hint {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 7px 16px;
+  background: #091652;
+  border-top: 1px solid rgba(120, 160, 255, 0.3);
+  color: #9fb6e8;
+  font-size: 1rem;
+}
+
+.guide-status {
+  margin: 0;
+  padding: 18px 16px;
+  color: #cfe0ff;
+  font-size: 1.2rem;
+}
+
+/* ---------------------------------------------------------- auto-scroll -- */
+
+/*
+ * Once it starts scrolling by itself the panel drops to the lower portion of
+ * the window, so the channel you were watching is visible again above it.
+ */
+.guide.is-autoscrolling {
+  height: min(26rem, 56vh);
+  margin-top: auto;
+  margin-bottom: 0.75rem;
+}
+
+.guide.is-autoscrolling .guide-rows { scrollbar-width: none; }
+.guide.is-autoscrolling .guide-rows::-webkit-scrollbar { display: none; }
+.guide.is-autoscrolling::backdrop { background: rgba(0, 0, 0, 0.35); }
+
+/* -------------------------------------------------------------- mobile -- */
+
+@media (max-width: 640px) {
+  .guide {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    border-width: 0;
+  }
+
+  .guide-brand { width: 5.5rem; flex-basis: 5.5rem; font-size: 1rem; }
+  .guide-brand span:last-child { display: none; }
+  .guide-channel { width: 5.5rem; flex-basis: 5.5rem; gap: 6px; padding: 6px; }
+  .guide-channel-name { display: none; }
+  .guide-channel-number { font-size: 1.6rem; text-align: left; }
+  .guide-now { margin-left: 5.5rem; }
+  .guide-time { font-size: 1.1rem; padding: 10px 6px; }
+  .guide-program { font-size: 1.05rem; padding: 0 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide.is-autoscrolling { height: min(46rem, calc(100vh - 1.5rem)); margin: 0; }
+}

@@ -1,0 +1,125 @@
+/*
+ * Picture effects. Each one is driven by a data attribute on .tv so the
+ * settings panel can switch it independently. All of them are deliberately
+ * restrained: the programme has to stay comfortably watchable.
+ */
+
+.fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+/* ----------------------------------------------------------- scanlines -- */
+
+.fx-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0px,
+    rgba(0, 0, 0, 0.22) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.tv[data-scanlines="on"] .fx-scanlines { opacity: 1; }
+
+/* Thicker lines read better on a small screen than a 1px comb. */
+@media (max-width: 640px) {
+  .fx-scanlines {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.2) 0px,
+      rgba(0, 0, 0, 0.2) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  }
+}
+
+/* ------------------------------------------- convergence (RGB fringing) -- */
+
+/*
+ * Real convergence error is worst at the edges of the tube, so the colour
+ * split is concentrated there rather than smeared over the whole picture.
+ */
+.fx-fringe {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 60, 90, 0.11) 0%,
+    rgba(255, 60, 90, 0.03) 1.6%,
+    transparent 4%,
+    transparent 96%,
+    rgba(60, 150, 255, 0.03) 98.4%,
+    rgba(60, 150, 255, 0.11) 100%
+  );
+  mix-blend-mode: screen;
+}
+
+.tv[data-fringing="on"] .fx-fringe { opacity: 1; }
+
+/* ------------------------------------------------ curvature and vignette -- */
+
+.fx-vignette {
+  background:
+    radial-gradient(130% 115% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+    radial-gradient(100% 140% at 50% -10%, rgba(255, 255, 255, 0.05), transparent 45%);
+  border-radius: 3% / 4%;
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.5);
+}
+
+.tv[data-curvature="on"] .fx-vignette { opacity: 1; }
+
+/* The tube bulges very slightly, and the corners are never truly square. */
+.tv[data-curvature="on"] .picture {
+  border-radius: 2.5% / 3.5%;
+  overflow: hidden;
+}
+
+.tv[data-curvature="on"] .picture-video {
+  transform: scale(1.012);
+}
+
+/* ------------------------------------------------------------- flicker -- */
+
+.fx-flicker { background: rgba(255, 255, 255, 0.035); }
+
+.tv[data-flicker="on"] .fx-flicker {
+  opacity: 1;
+  animation: crt-flicker 5.5s steps(1) infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 44%, 47%, 72%, 74%, 100% { opacity: 0.22; }
+  45%  { opacity: 0.62; }
+  46%  { opacity: 0.1; }
+  73%  { opacity: 0.5; }
+}
+
+/* ---------------------------------------------------------------- glow -- */
+
+.fx-glow {
+  background: radial-gradient(75% 60% at 50% 42%, rgba(190, 225, 255, 0.1), transparent 70%);
+}
+
+.tv[data-glow="on"] .fx-glow { opacity: 1; }
+
+.tv[data-glow="on"] .tv-screen {
+  box-shadow:
+    0 0 0 2px var(--bezel-edge),
+    0 0 42px rgba(120, 180, 255, 0.16),
+    0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* ------------------------------------------------------ reduced motion -- */
+
+@media (prefers-reduced-motion: reduce) {
+  /* No pulsing light. The layer stays, holding a steady value. */
+  .tv[data-flicker="on"] .fx-flicker {
+    animation: none;
+    opacity: 0.22;
+  }
+  .fx { transition: none; }
+}

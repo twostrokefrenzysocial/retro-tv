@@ -1,0 +1,86 @@
+/* The picture-settings dialog. Plain and legible, not a period piece. */
+
+.settings {
+  width: min(30rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 1px solid #3a3a42;
+  border-radius: 12px;
+  background: #16161a;
+  color: var(--ink);
+}
+
+.settings::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.settings-form { padding: 20px 22px 18px; }
+
+.settings h2 {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+}
+
+.settings-intro {
+  margin: 0 0 16px;
+  color: #a8adb6;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 18px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.settings-row:hover { background: rgba(255, 255, 255, 0.04); }
+
+.settings-row input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: #58c98a;
+  cursor: pointer;
+}
+
+.settings-text { display: flex; flex-direction: column; gap: 2px; }
+
+.settings-label { font-size: 0.94rem; }
+
+.settings-hint {
+  color: #9aa0a9;
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid #2a2a31;
+}
+
+.btn-primary {
+  background: linear-gradient(#2f6f4b, #245839);
+  border-color: #3b8a5e;
+  color: #eafff2;
+}
+
+.btn-primary:hover { background: linear-gradient(#37805726, #2b6844); }
+
+@media (max-width: 640px) {
+  .settings { width: calc(100vw - 1rem); }
+  .settings-row { padding: 14px 8px; }
+}

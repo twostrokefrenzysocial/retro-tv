@@ -1,0 +1,454 @@
+{
+  "contact": "https://github.com/twostrokefrenzysocial/retro-tv",
+  "maxItems": 400,
+  "maxYear": 2005,
+  "alwaysAllow": [
+    "prelinger"
+  ],
+  "blockTerms": [
+    "childbirth",
+    "human birth",
+    "sudden birth",
+    "birth of a baby",
+    "labor and delivery",
+    "autopsy",
+    "autopsia",
+    "cadaver",
+    "dissection",
+    "surgery",
+    "surgical",
+    "lobotomy",
+    "sexual*",
+    "sex education",
+    "sex hygiene",
+    "human reproduction",
+    "reproductive health",
+    "menstruation",
+    "menstrual",
+    "puberty",
+    "contraception",
+    "abortion",
+    "sterilization",
+    "venereal",
+    "syphilis",
+    "gonorrhea",
+    "vd",
+    "social hygiene",
+    "mental hygiene",
+    "playboy",
+    "penthouse magazine",
+    "hustler magazine",
+    "bunny club",
+    "nude",
+    "nudes",
+    "nudist",
+    "nudity",
+    "nudie",
+    "topless",
+    "striptease",
+    "stripper",
+    "burlesque",
+    "exploitation",
+    "erotic*",
+    "pornograph*",
+    "porno",
+    "x-rated",
+    "xxx",
+    "centerfold",
+    "centrefold",
+    "pin-up",
+    "pinup",
+    "brothel",
+    "prostitut*",
+    "call girl",
+    "escort service",
+    "swinger*",
+    "boob*",
+    "cleavage",
+    "lingerie",
+    "negligee",
+    "seduction",
+    "seduce",
+    "blue movie",
+    "adults only",
+    "for adults",
+    "execution",
+    "lynching",
+    "atrocity",
+    "atrocities",
+    "birth of a nation"
+  ],
+  "channels": [
+    {
+      "number": 2,
+      "slug": "silent-screen",
+      "name": "Silent Screen",
+      "description": "The silent era, title cards and all",
+      "sources": [
+        {
+          "query": "collection:\"silent_films\" AND mediatype:movies AND year:[1890 TO 1929]"
+        }
+      ],
+      "minDuration": 300,
+      "maxDuration": 7200,
+      "commercialBreaks": false,
+      "minYear": 1890,
+      "maxYear": 1929
+    },
+    {
+      "number": 3,
+      "slug": "picture-palace",
+      "name": "Picture Palace",
+      "description": "Features from the thirties and forties",
+      "sources": [
+        {
+          "query": "collection:\"feature_films\" AND mediatype:movies AND year:[1930 TO 1949]"
+        }
+      ],
+      "minDuration": 2400,
+      "maxDuration": 10800,
+      "commercialBreaks": true,
+      "minYear": 1930,
+      "maxYear": 1949
+    },
+    {
+      "number": 4,
+      "slug": "saturday-morning",
+      "name": "Saturday Morning",
+      "description": "Cartoons and animated shorts, pre-1970",
+      "sources": [
+        {
+          "query": "collection:\"animationandcartoons\" AND mediatype:movies AND year:[1920 TO 1969]"
+        },
+        {
+          "query": "collection:\"classic_cartoons\" AND mediatype:movies AND year:[1920 TO 1969]"
+        }
+      ],
+      "minDuration": 180,
+      "maxDuration": 1800,
+      "commercialBreaks": true,
+      "minYear": 1920,
+      "maxYear": 1969
+    },
+    {
+      "number": 5,
+      "slug": "noir-after-dark",
+      "name": "Noir After Dark",
+      "description": "Shadows, detectives and bad decisions",
+      "sources": [
+        {
+          "query": "collection:\"Film_Noir\" AND mediatype:movies AND year:[1940 TO 1959]"
+        }
+      ],
+      "minDuration": 1200,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1940,
+      "maxYear": 1959
+    },
+    {
+      "number": 6,
+      "slug": "atomic-age",
+      "name": "Atomic Age",
+      "description": "Fifties and sixties science fiction and horror",
+      "sources": [
+        {
+          "query": "collection:\"SciFi_Horror\" AND mediatype:movies AND year:[1945 TO 1969]"
+        }
+      ],
+      "minDuration": 1200,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1945,
+      "maxYear": 1969
+    },
+    {
+      "number": 7,
+      "slug": "rerun-central",
+      "name": "Rerun Central",
+      "description": "Television from the fifties and sixties",
+      "sources": [
+        {
+          "query": "collection:\"classic_tv\" AND mediatype:movies AND year:[1945 TO 1969]"
+        }
+      ],
+      "minDuration": 600,
+      "maxDuration": 3600,
+      "commercialBreaks": true,
+      "minYear": 1945,
+      "maxYear": 1969
+    },
+    {
+      "number": 8,
+      "slug": "prime-time",
+      "name": "Prime Time",
+      "description": "Television from the seventies and eighties",
+      "sources": [
+        {
+          "query": "collection:\"classic_tv\" AND mediatype:movies AND year:[1970 TO 1989]"
+        }
+      ],
+      "minDuration": 600,
+      "maxDuration": 3600,
+      "commercialBreaks": true,
+      "minYear": 1970,
+      "maxYear": 1989
+    },
+    {
+      "number": 9,
+      "slug": "feature-presentation",
+      "name": "Feature Presentation",
+      "description": "Features from the fifties to the seventies",
+      "sources": [
+        {
+          "query": "collection:\"feature_films\" AND mediatype:movies AND year:[1950 TO 1979]"
+        }
+      ],
+      "minDuration": 2400,
+      "maxDuration": 10800,
+      "commercialBreaks": true,
+      "minYear": 1950,
+      "maxYear": 1979
+    },
+    {
+      "number": 10,
+      "slug": "drive-in",
+      "name": "Drive-In",
+      "description": "Seventies and eighties horror and science fiction",
+      "sources": [
+        {
+          "query": "collection:\"SciFi_Horror\" AND mediatype:movies AND year:[1970 TO 1989]"
+        }
+      ],
+      "minDuration": 1200,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1970,
+      "maxYear": 1989
+    },
+    {
+      "number": 11,
+      "slug": "ephemera",
+      "name": "Ephemera",
+      "description": "Educational, industrial and instructional films",
+      "sources": [
+        {
+          "collection": "prelinger"
+        }
+      ],
+      "minDuration": 120,
+      "maxDuration": 2400,
+      "commercialBreaks": false,
+      "maxYear": 1979
+    },
+    {
+      "number": 12,
+      "slug": "chalkboard",
+      "name": "Chalkboard",
+      "description": "Classroom and training films, projector rattle included",
+      "sources": [
+        {
+          "collection": "educationalfilms"
+        },
+        {
+          "collection": "avgeeks"
+        }
+      ],
+      "minDuration": 300,
+      "maxDuration": 2400,
+      "commercialBreaks": true,
+      "minYear": 1930,
+      "maxYear": 1989
+    },
+    {
+      "number": 13,
+      "slug": "mission-control",
+      "name": "Mission Control",
+      "description": "Spaceflight footage and mission films",
+      "sources": [
+        {
+          "collection": "nasa"
+        }
+      ],
+      "minDuration": 180,
+      "maxDuration": 3600,
+      "commercialBreaks": false,
+      "minYear": 1958,
+      "maxYear": 2005
+    },
+    {
+      "number": 14,
+      "slug": "saddle-up",
+      "name": "Saddle Up",
+      "description": "Westerns, from the silent range to the late matinee",
+      "sources": [
+        {
+          "query": "subject:(western) AND mediatype:movies AND collection:(feature_films OR classic_tv OR silent_films OR SciFi_Horror) AND year:[1920 TO 1979]"
+        }
+      ],
+      "minDuration": 900,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1920,
+      "maxYear": 1979
+    },
+    {
+      "number": 15,
+      "slug": "bits-and-bytes",
+      "name": "Bits and Bytes",
+      "description": "Computing as it was explained on television",
+      "sources": [
+        {
+          "collection": "computerchronicles"
+        }
+      ],
+      "minDuration": 600,
+      "maxDuration": 3600,
+      "commercialBreaks": true,
+      "minYear": 1980,
+      "maxYear": 2005
+    },
+    {
+      "number": 16,
+      "slug": "case-files",
+      "name": "Case Files",
+      "description": "Mysteries, detectives and crime pictures",
+      "sources": [
+        {
+          "query": "subject:(mystery OR detective OR crime) AND mediatype:movies AND collection:(feature_films OR classic_tv OR silent_films OR SciFi_Horror) AND year:[1930 TO 1969]"
+        }
+      ],
+      "minDuration": 900,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1930,
+      "maxYear": 1969
+    },
+    {
+      "number": 17,
+      "slug": "coming-attractions",
+      "name": "Coming Attractions",
+      "description": "Nothing but trailers, back to back",
+      "sources": [
+        {
+          "query": "collection:\"movie_trailers\" AND mediatype:movies AND year:[1920 TO 1989]"
+        }
+      ],
+      "minDuration": 30,
+      "maxDuration": 600,
+      "commercialBreaks": false,
+      "minYear": 1920,
+      "maxYear": 1989,
+      "maxItems": 1200
+    },
+    {
+      "number": 18,
+      "slug": "showtime",
+      "name": "Showtime",
+      "description": "Musicals, revues and song-and-dance pictures",
+      "sources": [
+        {
+          "query": "subject:(musical OR music) AND mediatype:movies AND collection:(feature_films OR classic_tv OR silent_films OR SciFi_Horror) AND year:[1930 TO 1969]"
+        }
+      ],
+      "minDuration": 900,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1930,
+      "maxYear": 1969
+    },
+    {
+      "number": 19,
+      "slug": "laugh-track",
+      "name": "Laugh Track",
+      "description": "Comedies, shorts and slapstick",
+      "sources": [
+        {
+          "query": "subject:(comedy) AND mediatype:movies AND collection:(feature_films OR classic_tv OR silent_films) AND year:[1900 TO 1989]"
+        }
+      ],
+      "minDuration": 300,
+      "maxDuration": 7200,
+      "commercialBreaks": true,
+      "minYear": 1900,
+      "maxYear": 1989
+    },
+    {
+      "number": 20,
+      "slug": "high-adventure",
+      "name": "High Adventure",
+      "description": "Jungles, pirates, swashbucklers and lost worlds",
+      "sources": [
+        {
+          "query": "subject:(adventure) AND mediatype:movies AND collection:(feature_films OR classic_tv OR silent_films OR SciFi_Horror) AND year:[1930 TO 1969]"
+        }
+      ],
+      "minDuration": 900,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1930,
+      "maxYear": 1969
+    },
+    {
+      "number": 21,
+      "slug": "short-reel",
+      "name": "Short Reel",
+      "description": "Short films, one after another",
+      "sources": [
+        {
+          "collection": "short_films"
+        }
+      ],
+      "minDuration": 120,
+      "maxDuration": 1800,
+      "commercialBreaks": true,
+      "minYear": 1900,
+      "maxYear": 1989,
+      "maxItems": 600
+    },
+    {
+      "number": 22,
+      "slug": "the-front",
+      "name": "The Front",
+      "description": "War pictures and service films",
+      "sources": [
+        {
+          "query": "subject:(war OR military) AND mediatype:movies AND collection:(feature_films OR classic_tv OR silent_films OR SciFi_Horror) AND year:[1939 TO 1969]"
+        }
+      ],
+      "minDuration": 900,
+      "maxDuration": 9000,
+      "commercialBreaks": true,
+      "minYear": 1939,
+      "maxYear": 1969
+    },
+    {
+      "number": 23,
+      "slug": "newsreel",
+      "name": "Newsreel",
+      "description": "The news as it was shown before the feature",
+      "sources": [
+        {
+          "collection": "universal_newsreels"
+        }
+      ],
+      "minDuration": 60,
+      "maxDuration": 1800,
+      "commercialBreaks": false,
+      "minYear": 1929,
+      "maxYear": 1969,
+      "maxItems": 700
+    }
+  ],
+  "commercials": {
+    "sources": [
+      {
+        "collection": "classic_tv_commercials"
+      }
+    ],
+    "minDuration": 10,
+    "maxDuration": 120,
+    "maxItems": 500
+  },
+  "requireEnglish": true
+}

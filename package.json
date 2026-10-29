@@ -1,0 +1,29 @@
+{
+  "name": "retro-tv",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "catalog": "tsx scripts/build-catalog.ts",
+    "catalog:refresh": "tsx scripts/build-catalog.ts --refresh",
+    "catalog:strict": "tsx scripts/build-catalog.ts --strict-license"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.11",
+    "vitest": "^3.0.5"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "description": "A broadcast television simulator streaming public domain film from the Internet Archive.",
+  "license": "MIT"
+}

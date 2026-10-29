@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What's On — Retro TV</title>
+    <meta
+      name="description"
+      content="Everything airing right now on every Retro TV channel, refreshed automatically."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="page">
+      <div class="page-head">
+        <div class="brand"><span class="page-logo" data-logo></span><h1 class="page-title">What&rsquo;s On</h1></div>
+        <nav class="page-nav" aria-label="Site">
+          <a href="/">Watch TV</a>
+          <a href="/about/">About</a>
+        </nav>
+      </div>
+
+      <p class="page-lede">
+        Everything showing this minute, on every channel. Each viewer sees the same
+        programme at the same moment, so this is what you would find if you turned
+        the set on right now.
+      </p>
+
+      <ul class="now-list" id="now-list"></ul>
+      <p class="now-updated" id="updated" role="status"></p>
+    </main>
+    <script type="module" src="/src/pages/whats-on.ts"></script>
+  </body>
+</html>

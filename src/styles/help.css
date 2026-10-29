@@ -1,0 +1,101 @@
+/* Keyboard reference overlay, and the links under the set. */
+
+.tv-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  margin-top: 4px;
+  font-size: 0.88rem;
+}
+
+.tv-links a,
+.link-button {
+  color: #9fb6e8;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding: 4px 2px;
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tv-links a:hover,
+.tv-links a:focus-visible,
+.link-button:hover,
+.link-button:focus-visible { color: #dce8ff; border-bottom-color: currentColor; }
+
+.help {
+  width: min(34rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 2px solid #4a6fd8;
+  border-radius: 10px;
+  background: #050e3a;
+  color: #fff;
+}
+
+.help::backdrop { background: rgba(0, 0, 0, 0.72); }
+
+.help-inner { padding: 16px 20px 20px; }
+
+.help-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.help h2 {
+  margin: 0;
+  font-family: "VT323", ui-monospace, monospace;
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: #ffd84a;
+  letter-spacing: 0.03em;
+}
+
+.help .guide-close { border-left: 0; width: 34px; height: 34px; border-radius: 6px; }
+
+.help-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 9px 16px;
+  margin: 0;
+  align-items: baseline;
+}
+
+.help-list dt { display: flex; gap: 5px; }
+
+.help-list dd {
+  margin: 0;
+  color: #cfe0ff;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.help kbd {
+  display: inline-block;
+  min-width: 1.9rem;
+  padding: 3px 7px;
+  background: #16286e;
+  border: 1px solid #4a6fd8;
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: #fff;
+  font-family: "VT323", ui-monospace, monospace;
+  font-size: 1.05rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .help-list { grid-template-columns: 1fr; gap: 3px; }
+  .help-list dd { margin-bottom: 9px; }
+  .tv-links { padding: 0 10px 14px; }
+}

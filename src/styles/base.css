@@ -1,0 +1,40 @@
+:root {
+  --bezel: #1b1b1d;
+  --bezel-edge: #2e2e32;
+  --osd-green: #6cff6c;
+  --osd-amber: #ffd04a;
+  --ink: #e8e8e8;
+  --page: #0a0a0b;
+  --focus: #7fd7ff;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--page);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: clamp(0px, 2vw, 32px);
+}
+
+#app { width: 100%; max-width: 1180px; }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.fatal {
+  margin: 4rem auto;
+  max-width: 34rem;
+  text-align: center;
+  line-height: 1.6;
+}

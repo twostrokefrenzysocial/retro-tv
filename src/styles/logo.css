@@ -1,0 +1,91 @@
+/* The wordmark. Colours come from the surrounding context. */
+
+.logo {
+  height: 2.6rem;
+  width: auto;
+  overflow: visible;
+}
+
+.logo-cabinet {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  opacity: 0.9;
+}
+
+.logo-screen {
+  fill: var(--osd-green);
+  opacity: 0.16;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+
+.logo-scan path {
+  stroke: var(--osd-green);
+  stroke-width: 1.4;
+  opacity: 0.55;
+}
+
+.logo-ears,
+.logo-feet {
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  fill: none;
+  opacity: 0.85;
+}
+
+.logo-ear-tip { fill: var(--osd-amber); }
+.logo-knob { fill: currentColor; opacity: 0.55; }
+
+.logo-word-retro,
+.logo-word-tv {
+  font-family: "VT323", ui-monospace, monospace;
+  fill: currentColor;
+}
+
+.logo-word-retro { font-size: 22px; letter-spacing: 0.1em; }
+.logo-word-tv { font-size: 22px; letter-spacing: 0.26em; fill: var(--osd-green); }
+
+/* ------------------------------------------------- placements -- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #cfd6e2;
+}
+
+/* Above the set, on the main page. */
+.tv-brand {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 2px;
+  color: #aeb8c8;
+}
+
+.tv-brand .logo { height: 2.3rem; }
+
+/* On the off screen, larger and dimmer, like an unlit badge. */
+.power-screen .logo {
+  height: 3.4rem;
+  margin-bottom: 4px;
+  color: #7d8796;
+}
+
+/* Embossed into the cabinet, where a maker's badge would sit. */
+.cabinet-badge {
+  display: none;
+  color: rgba(255, 228, 190, 0.5);
+}
+
+.tv[data-cabinet="on"] .cabinet-badge { display: block; }
+.cabinet-badge .logo { height: 1.5rem; }
+.cabinet-badge .logo-screen { opacity: 0.1; }
+
+.page-head .logo { height: 2.1rem; color: #aeb8c8; }
+
+@media (max-width: 640px) {
+  .tv-brand { display: none; }
+  .cabinet-badge { display: none !important; }
+}

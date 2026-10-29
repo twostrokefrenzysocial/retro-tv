@@ -1,0 +1,53 @@
+name: Channel suggestion
+description: Suggest a new channel for the dial
+title: 'Channel suggestion: '
+labels: [channel-suggestion]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. The more concrete the examples, the quicker it is
+        to tell whether a channel will actually fill a broadcast day.
+
+  - type: input
+    id: name
+    attributes:
+      label: Channel name
+      description: What would it be called on the dial?
+      placeholder: Midnight Movie
+    validations:
+      required: true
+
+  - type: textarea
+    id: theme
+    attributes:
+      label: Theme
+      description: A sentence or two on what it would show.
+    validations:
+      required: true
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Example Archive collections or items
+      description: >
+        Collection identifiers (for example `prelinger`, `classic_tv`) or links
+        to specific archive.org items. A channel needs at least a day's worth of
+        playable material, so several examples help.
+      placeholder: |
+        https://archive.org/details/collectionname
+        or: collection identifier, plus a couple of example items
+    validations:
+      required: true
+
+  - type: input
+    id: number
+    attributes:
+      label: Preferred channel number
+      description: Optional. Existing numbers are taken.
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Rights notes, typical runtimes, anything else worth knowing.

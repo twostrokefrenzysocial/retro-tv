@@ -1,0 +1,189 @@
+/*
+ * "TV set" mode: an original wood-and-plastic console drawn entirely in CSS.
+ * No manufacturer marks, no logos -- just the shapes of the era.
+ */
+
+.tv-set {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.cabinet-top,
+.cabinet-fascia { display: none; }
+
+/* The dials belong to the cabinet; the button row serves everywhere else. */
+.tv:not([data-cabinet="on"]) .cabinet-knobs { display: none; }
+
+/* -------------------------------------------------------- cabinet mode -- */
+
+.tv[data-cabinet="on"] .tv-set {
+  padding: clamp(14px, 2.4vw, 30px);
+  padding-bottom: 0;
+  border-radius: 18px 18px 10px 10px;
+  background:
+    /* grain */
+    repeating-linear-gradient(
+      92deg,
+      rgba(0, 0, 0, 0.16) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(255, 220, 170, 0.05) 4px,
+      rgba(0, 0, 0, 0.1) 7px
+    ),
+    /* knots and shading */
+    radial-gradient(80% 40% at 18% 12%, rgba(255, 210, 150, 0.14), transparent 60%),
+    radial-gradient(60% 50% at 86% 78%, rgba(60, 26, 8, 0.4), transparent 65%),
+    linear-gradient(170deg, #6b4423 0%, #52321a 48%, #3d2513 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 215, 170, 0.22),
+    inset 0 -3px 10px rgba(0, 0, 0, 0.55),
+    0 26px 50px rgba(0, 0, 0, 0.65);
+}
+
+.tv[data-cabinet="on"] .tv-screen {
+  border-radius: 14px;
+  box-shadow:
+    inset 0 0 0 10px #15151a,
+    inset 0 0 0 12px rgba(255, 255, 255, 0.05),
+    0 0 0 3px #241404,
+    0 10px 26px rgba(0, 0, 0, 0.6);
+}
+
+/* Reinstate the glow on top of the cabinet's own bezel shadow. */
+.tv[data-cabinet="on"][data-glow="on"] .tv-screen {
+  box-shadow:
+    inset 0 0 0 10px #15151a,
+    inset 0 0 0 12px rgba(255, 255, 255, 0.05),
+    0 0 0 3px #241404,
+    0 0 42px rgba(120, 180, 255, 0.16),
+    0 10px 26px rgba(0, 0, 0, 0.6);
+}
+
+/* ------------------------------------------------------------- fascia -- */
+
+.tv[data-cabinet="on"] .cabinet-fascia {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(12px, 3vw, 34px);
+  width: 100%;
+  padding: clamp(10px, 1.8vw, 20px) clamp(8px, 1.6vw, 18px) clamp(14px, 2.2vw, 24px);
+}
+
+.cabinet-grille {
+  flex: 1 1 auto;
+  height: clamp(26px, 4.4vw, 46px);
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(18, 12, 6, 0.9) 0px,
+      rgba(18, 12, 6, 0.9) 2px,
+      rgba(150, 115, 70, 0.3) 2px,
+      rgba(150, 115, 70, 0.3) 5px
+    );
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
+.cabinet-knobs {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(8px, 1.4vw, 16px);
+}
+
+.knob-well {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.knob-caption {
+  font-family: "VT323", ui-monospace, monospace;
+  font-size: clamp(0.62rem, 1.1vw, 0.78rem);
+  letter-spacing: 0.1em;
+  color: rgba(255, 228, 190, 0.6);
+}
+
+.knob {
+  display: block;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  background:
+    radial-gradient(60% 60% at 36% 30%, #d8d2c6 0%, #8d8477 42%, #4a443b 100%);
+  box-shadow:
+    inset 0 -2px 4px rgba(0, 0, 0, 0.55),
+    inset 0 2px 3px rgba(255, 255, 255, 0.35),
+    0 3px 6px rgba(0, 0, 0, 0.55);
+  position: relative;
+}
+
+/* The rotating face, carrying the pointer line. */
+.knob-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  transform: rotate(var(--knob-angle, 0deg));
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.knob-face::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  width: 2.5px;
+  height: 34%;
+  background: rgba(22, 17, 11, 0.9);
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.knob:hover { filter: brightness(1.12); }
+.knob:active { transform: translateY(1px); }
+
+.knob:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.knob-large { width: clamp(34px, 4.6vw, 48px); aspect-ratio: 1; }
+.knob-small { width: clamp(24px, 2.8vw, 30px); aspect-ratio: 1; }
+
+/* A lit pilot lamp beside the power dial when the set is on. */
+.knob[data-knob="power"].is-on {
+  box-shadow:
+    inset 0 -2px 4px rgba(0, 0, 0, 0.55),
+    inset 0 2px 3px rgba(255, 255, 255, 0.35),
+    0 0 10px rgba(120, 255, 170, 0.55),
+    0 3px 6px rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knob-face { transition: none; }
+  .knob:active { transform: none; }
+}
+
+/* A thin highlight along the top edge of the cabinet. */
+.tv[data-cabinet="on"] .cabinet-top {
+  display: block;
+  width: 86%;
+  height: 6px;
+  margin-bottom: clamp(8px, 1.4vw, 14px);
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255, 220, 180, 0.22), transparent);
+}
+
+@media (max-width: 640px) {
+  /* The cabinet eats screen width a phone cannot spare. */
+  .tv[data-cabinet="on"] .tv-set {
+    padding: 8px;
+    border-radius: 0;
+  }
+  .tv[data-cabinet="on"] .tv-screen { border-radius: 6px; }
+  .knob-small { display: none; }
+}

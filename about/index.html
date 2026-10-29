@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About — Retro TV</title>
+    <meta
+      name="description"
+      content="What Retro TV is, how the shared schedule works, and where the programmes come from."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="page">
+      <div class="page-head">
+        <div class="brand"><span class="page-logo" data-logo></span><h1 class="page-title">About Retro TV</h1></div>
+        <nav class="page-nav" aria-label="Site">
+          <a href="/">Watch TV</a>
+          <a href="/whats-on/">What&rsquo;s On</a>
+        </nav>
+      </div>
+
+      <p class="page-lede">
+        Retro TV is a television set that behaves like broadcast television used to.
+        There is no library to browse and nothing to queue up. You turn it on, and
+        whatever is scheduled is already halfway through.
+      </p>
+
+      <h2>Everyone is watching the same thing</h2>
+      <p>
+        Every channel runs to a fixed schedule derived from the current date and the
+        channel&rsquo;s name. Your browser works out what should be playing and seeks to
+        that exact point in the file, so two people opening the site on opposite sides
+        of the world see the same frame at the same moment. Turn a channel off and come
+        back later and the programme will have moved on without you, exactly as it would
+        have done in 1994.
+      </p>
+      <p>
+        The schedule is generated per UTC day rather than per local day, so nobody gets a
+        different line-up for being in a different time zone. A programme that runs past
+        midnight is allowed to finish, and the next day picks up where it left off.
+      </p>
+
+      <h2>Where the programmes come from</h2>
+      <p>
+        Everything you see is streamed directly from the
+        <a href="https://archive.org" target="_blank" rel="noopener noreferrer">Internet Archive</a>,
+        a non-profit library of millions of free books, films, software and web pages. This
+        project stores no video of its own; it only keeps a list of identifiers and runtimes
+        and points your browser at archive.org.
+      </p>
+      <p>
+        The Internet Archive makes all of this possible, and it is worth supporting. If you
+        enjoy this, consider
+        <a href="https://archive.org/donate" target="_blank" rel="noopener noreferrer">donating to them</a>
+        rather than to anyone else.
+      </p>
+
+      <div class="callout">
+        <p>
+          <strong>On rights:</strong> the programmes here are drawn from Internet Archive
+          collections that generally hold public domain and openly licensed material, but
+          the rights status of any individual item is between you and the Archive. This
+          project makes no determination about the copyright status of anything it links to.
+          Every programme in the info bar, the guide and the What&rsquo;s On page links to its
+          archive.org page &mdash; check there for the rights information on anything you
+          care about.
+        </p>
+      </div>
+
+      <h2>Suggest a channel</h2>
+      <p>
+        The line-up is defined in a single configuration file, and adding a channel is
+        mostly a matter of naming an Archive collection and a sensible runtime range. If
+        there is a corner of the Archive you think deserves its own channel, say so.
+      </p>
+      <p><a class="btn-link" id="suggest-link" href="#">Suggest a channel on GitHub</a></p>
+
+      <h2>Keyboard controls</h2>
+      <ul>
+        <li><strong>Up and Down arrows</strong>, or the mouse wheel, change channel.</li>
+        <li><strong>Digits</strong> tune directly; the set waits a moment, or press Enter.</li>
+        <li><strong>Backspace</strong> or <strong>L</strong> returns to the previous channel.</li>
+        <li><strong>I</strong> shows what is on.</li>
+        <li><strong>Left and Right arrows</strong>, or <strong>+</strong> and <strong>&minus;</strong>, set the volume. <strong>M</strong> mutes.</li>
+        <li><strong>G</strong> opens the guide, <strong>S</strong> the picture settings.</li>
+        <li><strong>?</strong> shows this list on the television itself, and <strong>Escape</strong> closes anything that is open.</li>
+      </ul>
+
+      <h2>Accessibility</h2>
+      <p>
+        Every control is reachable by keyboard and carries a label. If your system asks for
+        reduced motion, the flicker, the channel-change static and the guide&rsquo;s automatic
+        scrolling all switch off, and the picture effects can be turned off individually in
+        the picture settings.
+      </p>
+
+      <div class="page-footer">
+        <p>
+          Retro TV is an original design. It uses no broadcaster names, logos or character
+          art, and is not affiliated with the Internet Archive or with any television
+          network, past or present.
+        </p>
+      </div>
+    </main>
+    <script type="module" src="/src/pages/about.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+name: Update catalogue
+
+# Rebuilds public/catalog from the Internet Archive once a week and commits
+# the result. Vercel is connected to this repository, so the commit is what
+# triggers the redeploy -- there is no deploy step here.
+on:
+  schedule:
+    # Mondays, 04:17 UTC. An odd minute keeps us off the hour, when every
+    # other cron job on GitHub is firing at once.
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: 'Ignore the cached API responses and refetch everything'
+        type: boolean
+        default: false
+      strict_license:
+        description: 'Keep only public domain / Creative Commons items'
+        type: boolean
+        default: false
+
+# Needed to push the updated catalogue back to the branch.
+permissions:
+  contents: write
+
+concurrency:
+  group: update-catalogue
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # The cache is the difference between a three minute run and an hour of
+      # polite, rate-limited requests. The rolling key means each run restores
+      # the previous week's cache and saves its own.
+      - name: Restore the archive.org response cache
+        uses: actions/cache@v4
+        with:
+          path: scripts/cache
+          key: archive-cache-${{ github.run_id }}
+          restore-keys: |
+            archive-cache-
+
+      - name: Build the catalogue
+        run: |
+          ARGS=""
+          if [ "${{ inputs.refresh }}" = "true" ]; then ARGS="$ARGS --refresh"; fi
+          if [ "${{ inputs.strict_license }}" = "true" ]; then ARGS="$ARGS --strict-license"; fi
+          echo "Running: npm run catalog -- $ARGS"
+          npm run catalog -- $ARGS | tee catalogue-summary.txt
+
+      - name: Check the catalogue is still usable
+        run: |
+          # A truncated or empty catalogue must never be committed.
+          node --input-type=module -e '
+            import { readFileSync, readdirSync } from "node:fs";
+            const index = JSON.parse(readFileSync("public/catalog/index.json", "utf8"));
+            if (!Array.isArray(index.channels) || index.channels.length === 0) {
+              throw new Error("index.json lists no channels");
+            }
+            for (const channel of index.channels) {
+              const file = `public/catalog/${channel.slug}.json`;
+              const data = JSON.parse(readFileSync(file, "utf8"));
+              if (!Array.isArray(data.items) || data.items.length === 0) {
+                throw new Error(`${file} has no items`);
+              }
+            }
+            const files = readdirSync("public/catalog").filter((f) => f.endsWith(".json"));
+            console.log(`OK: ${index.channels.length} channels across ${files.length} files`);
+          '
+
+      - name: Commit the changes, if there are any
+        run: |
+          if git diff --quiet -- public/catalog; then
+            echo "The catalogue is unchanged; nothing to commit."
+            exit 0
+          fi
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add public/catalog
+          git commit -m "Update catalogue $(date -u +%Y-%m-%d)"
+          git push
+          echo "Catalogue updated. Vercel will redeploy from this commit."
+
+      - name: Publish the summary table
+        if: always()
+        run: |
+          {
+            echo '## Catalogue build'
+            echo ''
+            echo '```'
+            tail -n 40 catalogue-summary.txt || echo 'No summary was produced.'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

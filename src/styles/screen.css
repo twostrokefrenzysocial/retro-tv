@@ -1,0 +1,221 @@
+.tv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ---------------------------------------------------------- the screen -- */
+
+.tv-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 78vh;
+  margin-inline: auto;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 2px var(--bezel-edge), 0 24px 60px rgba(0, 0, 0, 0.6);
+  touch-action: pan-x;
+}
+
+/* Keep the 4:3 picture pillarboxed rather than stretched on wide screens. */
+@media (min-aspect-ratio: 4 / 3) {
+  .tv-screen { width: auto; height: min(72vh, calc((100vw - 4rem) * 0.75)); aspect-ratio: 4 / 3; }
+  .tv[data-cabinet="on"] .tv-screen { height: min(62vh, calc((100vw - 6rem) * 0.75)); }
+}
+
+.picture { position: absolute; inset: 0; }
+
+.picture-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.picture-video.is-live { opacity: 1; }
+
+.picture-static,
+.picture-testcard {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 90ms linear;
+}
+
+.picture-static {
+  image-rendering: pixelated;
+  object-fit: cover;
+}
+
+.picture-static.is-visible { opacity: 1; }
+
+/* The test card only appears while the set reports a fault. */
+.tv[data-fault="true"] .picture-testcard { opacity: 1; }
+.tv[data-fault="true"] .picture-video { opacity: 0; }
+
+/* ------------------------------------------------------- power states -- */
+
+.picture-off {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 28% 18%, rgba(255, 255, 255, 0.07), transparent 58%),
+    linear-gradient(160deg, #111114 0%, #06060a 62%);
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+.tv[data-state="on"] .picture-off,
+.tv[data-state="warming"] .picture-off { opacity: 0; }
+
+/* CRT power-on: a horizontal line that opens out to the full raster. */
+.tv[data-state="warming"] .picture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #e9f6ff;
+  animation: crt-on 620ms ease-out forwards;
+}
+
+@keyframes crt-on {
+  0%   { transform: scale(0.02, 0.002); opacity: 1; }
+  45%  { transform: scale(1, 0.004); opacity: 1; }
+  100% { transform: scale(1, 1); opacity: 0; }
+}
+
+.power-screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  justify-items: center;
+  background: transparent;
+  border: 0;
+  color: #b9c2cc;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tv[data-state="on"] .power-screen,
+.tv[data-state="warming"] .power-screen { display: none; }
+
+.power-glyph {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 3px solid currentColor;
+  position: relative;
+  transition: color 160ms ease, box-shadow 160ms ease;
+}
+
+.power-glyph::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  width: 3px;
+  height: 26px;
+  background: currentColor;
+  transform: translateX(-50%);
+}
+
+.power-screen:hover .power-glyph,
+.power-screen:focus-visible .power-glyph {
+  color: #e8fff0;
+  box-shadow: 0 0 26px rgba(140, 255, 180, 0.4);
+}
+
+.power-label { letter-spacing: 0.22em; text-transform: uppercase; font-size: 0.78rem; }
+
+/* ------------------------------------------------------------ controls -- */
+
+.tv-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.btn-pair { display: flex; gap: 4px; }
+
+.btn {
+  min-width: 68px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #3a3a40;
+  background: linear-gradient(#2b2b30, #1f1f24);
+  color: #dfe3e8;
+  font: 600 0.78rem/1 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.btn:hover { background: linear-gradient(#35353c, #26262c); }
+.btn:active { transform: translateY(1px); }
+.btn-power { color: #ff9c9c; }
+
+@media (max-width: 640px) {
+  body { padding: 0; }
+
+  .tv { gap: 10px; }
+
+  /* The picture takes the full width of the phone. */
+  .tv-screen {
+    border-radius: 0;
+    max-height: none;
+    width: 100%;
+  }
+
+  /*
+   * Controls become a grid of large touch targets below the screen.
+   * 48px is the smallest comfortable target; these are taller.
+   */
+  .tv-controls {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+    width: 100%;
+  }
+
+  .btn-pair { display: contents; }
+
+  .btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    font-size: 0.82rem;
+  }
+}
+
+/* Very narrow phones: three across rather than four cramped ones. */
+@media (max-width: 380px) {
+  .tv-controls { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* A plain fade instead of the expanding raster line. */
+  .tv[data-state="warming"] .picture::after {
+    animation: crt-on-reduced 300ms linear forwards;
+  }
+  @keyframes crt-on-reduced {
+    from { opacity: 0.85; }
+    to { opacity: 0; }
+  }
+  .btn:active { transform: none; }
+  .picture-static,
+  .picture-testcard { transition: none; }
+}
