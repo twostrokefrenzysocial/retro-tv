@@ -22,14 +22,21 @@ export interface Prefs {
 
 const KEY = 'retro-tv:prefs';
 
-/** Everything on but subtle, except the cabinet and the tone. */
+/**
+ * Everything on but subtle, except the test tone.
+ *
+ * The cabinet is on by default because it is the thing the site is: a
+ * first-time viewer should arrive at a television set with working dials, not
+ * at a bare video they have to go into the settings to furnish. Anyone who
+ * wants the picture alone can switch it off, and that choice is remembered.
+ */
 export const DEFAULT_EFFECTS: Effects = {
   scanlines: true,
   curvature: true,
   fringing: true,
   flicker: true,
   glow: true,
-  cabinet: false,
+  cabinet: true,
   testTone: false,
 };
 

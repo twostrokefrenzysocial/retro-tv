@@ -1,0 +1,7 @@
+# Vercel uploads the working directory, which does not obey .gitignore.
+# The response cache alone is a gigabyte across twenty thousand files.
+node_modules
+scripts/cache
+dist
+.git
+.env*
