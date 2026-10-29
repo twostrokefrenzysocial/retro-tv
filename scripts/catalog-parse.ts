@@ -106,10 +106,20 @@ export function parseYear(
 
 /**
  * Collapses an item's text fields into one lowercase haystack for the
- * content filter: title, subject tags and description.
+ * content filter: title, filename, subject tags and description.
+ *
+ * The filename matters as much as the title. Bulk cartoon uploads carry a
+ * metadata title that is only the year -- "1932" -- while the name of the
+ * picture sits in the file beside it, so a filter reading the title alone is
+ * blind to exactly the items whose titles tell a viewer nothing either.
  */
-export function searchableText(meta: Record<string, unknown>, title: string): string {
+export function searchableText(
+  meta: Record<string, unknown>,
+  title: string,
+  filename?: string,
+): string {
   const parts: string[] = [title];
+  if (filename) parts.push(filename.replace(/[_\-.]+/g, ' '));
   for (const key of ['subject', 'description']) {
     const raw = meta[key];
     if (Array.isArray(raw)) parts.push(...raw.map(String));
@@ -213,7 +223,7 @@ const ARCHIVE_CODE = /^(?:JSC|CMP|HQ|VJSC|GSFC|KSC|MSFC|LRC|ARC)[-_ ]?\d+[-_ ]+(
  * Deliberately conservative. A hyphenated title ("Rikki-Tikki-Tavi") and a
  * title that merely contains digits are left exactly as they are.
  */
-export function displayTitle(raw: string): string {
+export function displayTitle(raw: string, filename?: string): string {
   let text = String(raw).trim();
 
   text = text.replace(FILE_EXTENSION, '');
@@ -225,5 +235,52 @@ export function displayTitle(raw: string): string {
 
   text = text.replace(/\s+/g, ' ').trim();
 
+  if (isDateOnly(text) && filename) {
+    const fromFile = titleFromFilename(filename);
+    if (fromFile !== null) return fromFile;
+  }
+
   return text.length > 0 ? text : String(raw).trim();
+}
+
+/** Nothing but digits and the punctuation a date is written with. */
+function isDateOnly(text: string): boolean {
+  return text.length > 0 && /^[\d\s./\-]+$/.test(text);
+}
+
+/** A date stamp an uploader put on the front of a filename. */
+const FILENAME_DATE_PREFIX =
+  /^(?:\d[\d./\-]*\s*[-\u2013\u2014]\s*|\d[\d./]*\.\s+|\d{4}[A-Z]{2,}\d*\.\s*)/;
+
+/** A format or source tag an encoder left on: "[Blu-Ray]", "[512kb]". */
+const FILENAME_TAG = /\[[^\]]*\]/g;
+
+/** The Archive's own marker on a derived file, left before the extension. */
+const IA_SUFFIX = /\.ia$/i;
+
+/**
+ * Recovers a programme's name from the file it is stored in.
+ *
+ * Only reached when the uploader's title is a bare date, which is how whole
+ * cartoon collections arrive: the item is called "1958" and the picture is
+ * called "1958 - Harlem Wednesday.ia.mp4". Showing the date in the guide
+ * tells a viewer nothing about what they are about to watch, and a viewer who
+ * cannot tell what a programme is cannot decide to skip it.
+ *
+ * Returns null rather than a guess when the filename has no words in it, so
+ * the caller keeps whatever the uploader gave.
+ */
+export function titleFromFilename(filename: string): string | null {
+  let text = String(filename).trim();
+
+  text = text.replace(FILE_EXTENSION, '');
+  text = text.replace(IA_SUFFIX, '');
+  text = text.replace(FILENAME_TAG, ' ');
+  text = text.replace(FILENAME_DATE_PREFIX, '');
+  if (text.includes('_')) text = text.replace(/_/g, ' ');
+  text = text.replace(/\s+/g, ' ').trim();
+
+  // A filename that is itself only a date or a serial number is no better
+  // than the title it would replace.
+  return /[a-z]{2}/i.test(text) ? text : null;
 }

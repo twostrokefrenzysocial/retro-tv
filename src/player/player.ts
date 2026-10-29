@@ -11,8 +11,17 @@ import { streamUrl } from './stream-url.ts';
 const STALL_TIMEOUT_MS = 8_000;
 const DRIFT_CHECK_MS = 30_000;
 const DRIFT_TOLERANCE_S = 5;
-/** Start buffering the next segment this far before the current one ends. */
-const PRELOAD_LEAD_MS = 20_000;
+/**
+ * Start buffering the next segment this far before the current one ends.
+ *
+ * Generous because of what is actually being buffered. The cartoon channels
+ * stream 25 MB files that are ready in a second, but archive.org's h.264
+ * derivative of a feature runs 400 MB to 1.4 GB, and a good few of those are
+ * written with the index at the end of the file, so the browser fetches the
+ * tail before it can play a frame. Twenty seconds of lead was not enough to
+ * swallow that, and the join between programmes was where it showed.
+ */
+const PRELOAD_LEAD_MS = 60_000;
 /** Give up skipping after this many bad segments in a row. */
 const MAX_CONSECUTIVE_SKIPS = 5;
 /**
@@ -33,6 +42,14 @@ export interface PlayerEvents {
   onFault(reason: string): void;
   /** Picture is back. */
   onRecover(): void;
+  /**
+   * The set is waiting on the network rather than showing a programme.
+   *
+   * A fault this is not: the picture is coming. But a feature can take some
+   * seconds to arrive, and a screen that sits black with no explanation
+   * reads as broken, so the set says what it is doing.
+   */
+  onTuning(waiting: boolean): void;
 }
 
 interface Loaded {
@@ -76,7 +93,26 @@ export class TvPlayer {
       // No crossOrigin: archive.org's storage nodes send no CORS headers, and
       // plain playback does not need them. Setting it blocks every request.
       video.addEventListener('error', () => this.handleError(video));
+      // Only the element on screen is worth reporting: the standby buffers
+      // out of sight for a minute before every swap, and saying so would
+      // leave the caption up almost permanently.
+      video.addEventListener('waiting', () => {
+        if (video === this.active) this.setTuning(true);
+      });
+      for (const settled of ['playing', 'canplay'] as const) {
+        video.addEventListener(settled, () => {
+          if (video === this.active) this.setTuning(false);
+        });
+      }
     }
+  }
+
+  private tuning = false;
+
+  private setTuning(waiting: boolean): void {
+    if (this.tuning === waiting) return;
+    this.tuning = waiting;
+    this.events.onTuning(waiting);
   }
 
   private get active(): HTMLVideoElement {
@@ -120,6 +156,8 @@ export class TvPlayer {
       video.load();
     }
     this.loadedOn = [null, null];
+    // A set that is off is not waiting for anything.
+    this.setTuning(false);
   }
 
   /** Loads whatever is live right now into the active element. */
@@ -143,6 +181,8 @@ export class TvPlayer {
     const target = segment.fileStart + seekSeconds;
     const index = video === this.videos[0] ? 0 : 1;
     this.loadedOn[index] = { identifier: segment.identifier, fileStart: segment.fileStart };
+
+    if (video === this.active) this.setTuning(true);
 
     video.src = url;
     video.volume = this.volume;
@@ -364,6 +404,9 @@ export class TvPlayer {
   }
 
   private fault(reason: string): void {
+    // The test card replaces the caption; showing both says the set is
+    // loading and broken at the same time.
+    this.setTuning(false);
     if (this.faulted) return;
     this.faulted = true;
     this.events.onFault(reason);

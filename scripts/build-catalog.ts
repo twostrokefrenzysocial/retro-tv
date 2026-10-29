@@ -68,6 +68,7 @@ interface Config {
   maxYear?: number;
   /** Titles, subjects or descriptions containing these are never included. */
   blockTerms?: string[];
+  blockIdentifiers?: string[];
   /** Drop anything declared non-English or titled in another script. */
   requireEnglish?: boolean;
   channels: ChannelSpec[];
@@ -174,6 +175,7 @@ interface SkipCounts {
   outOfEra: number;
   blocked: number;
   blockedCollection: number;
+  blockedIdentifier: number;
 }
 
 interface BuildResult {
@@ -187,6 +189,7 @@ function emptySkips(): SkipCounts {
   return {
     notEnglish: 0, unplayableCodec: 0, noFile: 0, noDuration: 0, tooShort: 0, tooLong: 0,
     error: 0, license: 0, outOfEra: 0, blocked: 0, blockedCollection: 0,
+    blockedIdentifier: 0,
   };
 }
 
@@ -207,6 +210,7 @@ async function collectItems(
     requireEnglish: boolean;
     blockTerms: string[];
     blockCollections: string[];
+    blockIdentifiers: string[];
   },
 ): Promise<BuildResult> {
   const skips = emptySkips();
@@ -322,7 +326,7 @@ async function collectItems(
       }
     }
 
-    const cleanTitle = displayTitle(String(title));
+    const cleanTitle = displayTitle(String(title), file.name);
     const year = parseYear(metadata, cleanTitle);
 
     const datable = year !== null || opts.allowUnknownYear === true;
@@ -331,7 +335,15 @@ async function collectItems(
       continue;
     }
 
-    const blockedBy = isBlocked(searchableText(metadata, cleanTitle), opts.blockTerms);
+    if (opts.blockIdentifiers.includes(doc.identifier)) {
+      skips.blockedIdentifier += 1;
+      continue;
+    }
+
+    const blockedBy = isBlocked(
+      searchableText(metadata, cleanTitle, file.name),
+      opts.blockTerms,
+    );
     if (blockedBy !== null) {
       skips.blocked += 1;
       continue;
@@ -368,6 +380,7 @@ function describeSkips(s: SkipCounts): string {
   if (s.outOfEra) parts.push(`${s.outOfEra} wrong era`);
   if (s.blocked) parts.push(`${s.blocked} filtered`);
   if (s.blockedCollection) parts.push(`${s.blockedCollection} blocked collection`);
+  if (s.blockedIdentifier) parts.push(`${s.blockedIdentifier} blocked item`);
   if (s.license) parts.push(`${s.license} license`);
   if (s.error) parts.push(`${s.error} errors`);
   return parts.length ? parts.join(', ') : '-';
@@ -416,6 +429,7 @@ async function main(): Promise<void> {
       requireEnglish: config.requireEnglish !== false,
       blockTerms: config.blockTerms ?? [],
       blockCollections: config.blockCollections ?? [],
+      blockIdentifiers: config.blockIdentifiers ?? [],
     });
 
     const totalRuntime = result.items.reduce((sum, item) => sum + item.duration, 0);
@@ -481,6 +495,7 @@ async function main(): Promise<void> {
     requireEnglish: config.requireEnglish !== false,
     blockTerms: config.blockTerms ?? [],
     blockCollections: config.blockCollections ?? [],
+    blockIdentifiers: config.blockIdentifiers ?? [],
   });
   await writeFile(
     join(outDir, 'commercials.json'),

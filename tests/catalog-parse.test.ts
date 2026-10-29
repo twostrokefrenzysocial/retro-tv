@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   displayTitle,
+  titleFromFilename,
   formatRank,
   hasNonLatinScript,
   isBlocked,
@@ -249,7 +250,41 @@ describe('adult and graphic content filtering', () => {
   });
 });
 
+describe('titleFromFilename', () => {
+  it('drops the date an uploader stamped on the front', () => {
+    expect(titleFromFilename('1958 - Harlem Wednesday.ia.mp4')).toBe('Harlem Wednesday');
+    expect(titleFromFilename('10.23.1948 - Going Places.mp4')).toBe('Going Places');
+    expect(titleFromFilename('1936.01.17 - Somewhere in Dreamland.mp4')).toBe(
+      'Somewhere in Dreamland',
+    );
+  });
+
+  it('drops an encoder tag', () => {
+    expect(titleFromFilename('1945PS06. Seaman Tarfu (Snafu)[Blu-Ray].ia.mp4')).toBe(
+      'Seaman Tarfu (Snafu)',
+    );
+  });
+
+  it('gives up on a filename with no words in it', () => {
+    expect(titleFromFilename('393979.mp4')).toBeNull();
+    expect(titleFromFilename('1627.ia.mp4')).toBeNull();
+  });
+});
+
 describe('displayTitle', () => {
+  it('falls back to the filename when the title is only a date', () => {
+    expect(displayTitle('1958', '1958 - Harlem Wednesday.ia.mp4')).toBe('Harlem Wednesday');
+    expect(displayTitle('1960-', '1960 - Children of the Sun.ia.mp4')).toBe('Children of the Sun');
+  });
+
+  it('keeps a numeric title the filename cannot improve on', () => {
+    expect(displayTitle('1776', '393979.mp4')).toBe('1776');
+  });
+
+  it('leaves a real title alone even when a filename is offered', () => {
+    expect(displayTitle('Nosferatu', '1922 - Something Else.mp4')).toBe('Nosferatu');
+  });
+
   it('drops a container extension left on the end of an upload', () => {
     expect(displayTitle('CMP306_Reflections.wmv')).toBe('Reflections');
     expect(displayTitle('Nosferatu.mp4')).toBe('Nosferatu');

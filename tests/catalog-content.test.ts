@@ -9,13 +9,18 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { isBlocked } from '../scripts/catalog-parse.ts';
+import { isBlocked, titleFromFilename } from '../scripts/catalog-parse.ts';
 import type { CatalogItem } from '../src/types.ts';
 
 const CATALOG = join(process.cwd(), 'public', 'catalog');
 const config = JSON.parse(
   readFileSync(join(process.cwd(), 'config', 'channels.config.json'), 'utf8'),
-) as { blockTerms: string[]; blockCollections: string[]; maxYear: number };
+) as {
+  blockTerms: string[];
+  blockCollections: string[];
+  blockIdentifiers: string[];
+  maxYear: number;
+};
 
 function everyItem(): { file: string; item: CatalogItem }[] {
   const out: { file: string; item: CatalogItem }[] = [];
@@ -69,6 +74,38 @@ describe('the catalogue as shipped', () => {
       .map(({ file, item }) => ({ file, item, term: isBlocked(item.title, config.blockTerms) }))
       .filter((h) => h.term !== null);
     expect(hits.map((h) => `${h.file}: ${h.item.title} [${h.term}]`)).toEqual([]);
+  });
+
+  it('carries no filename matching a block term', () => {
+    // Whole cartoon collections arrive titled only with the year, so a clean
+    // title is no evidence at all about what the programme is. The name of
+    // the picture is in the file, and that is where the caricature shorts
+    // were hiding when one of them reached the dial.
+    const hits = all
+      .map(({ file, item }) => ({
+        file,
+        item,
+        term: isBlocked(item.filename.replace(/[_\-.]+/g, ' '), config.blockTerms),
+      }))
+      .filter((h) => h.term !== null);
+    expect(hits.map((h) => `${h.file}: ${h.item.filename} [${h.term}]`)).toEqual([]);
+  });
+
+  it('carries no item listed by identifier', () => {
+    const listed = new Set(config.blockIdentifiers);
+    const hits = all.filter(({ item }) => listed.has(item.identifier));
+    expect(hits.map((h) => `${h.file}: ${h.item.identifier}`)).toEqual([]);
+  });
+
+  it('shows no date where the filename knows the real title', () => {
+    // "1958" tells a viewer nothing, and a viewer who cannot tell what a
+    // programme is cannot decide to skip it. A bare number is only allowed
+    // to stand when the file has no name to recover -- "1776" is a picture.
+    const dates = all.filter(
+      ({ item }) =>
+        /^[\d\s./-]+$/.test(item.title) && titleFromFilename(item.filename) !== null,
+    );
+    expect(dates.map((d) => `${d.file}: ${d.item.title} (${d.item.filename})`)).toEqual([]);
   });
 
   it('respects the year ceiling', () => {

@@ -22,6 +22,7 @@ export const SHELL_HTML = `
         <div class="fx fx-glow" aria-hidden="true"></div>
 
         <div class="picture-off" aria-hidden="true"></div>
+        <p class="picture-tuning" role="status">Tuning in</p>
       </div>
 
       <div class="osd">

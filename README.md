@@ -212,11 +212,32 @@ catches, say, an untagged Japanese advert. Items with no declared language are
 kept, since rejecting them would discard most of the archive. `silent` and
 `zxx` count as English-compatible, which is what keeps Silent Screen working.
 
-**`blockTerms`** is a list matched against each item's title, subject and
-description. A trailing asterisk makes a term a stem, so `sexual*` also catches
-"sexually" and "sexuality". Matching is otherwise whole-word, so `vd` does not
-fire on "advanced". The default list covers childbirth and medical-procedure
-films, sex-education and hygiene films, adult material and graphic violence.
+**`blockTerms`** is a list matched against each item's title, filename, subject
+and description. A trailing asterisk makes a term a stem, so `sexual*` also
+catches "sexually" and "sexuality". Matching is otherwise whole-word, so `vd`
+does not fire on "advanced". The default list covers childbirth and
+medical-procedure films, sex-education and hygiene films, adult material,
+graphic violence, and racial caricature.
+
+The filename is in that haystack for a reason. Whole cartoon collections arrive
+with a metadata title that is only the year — the item is called `1958` and the
+picture is called `1958 - Harlem Wednesday.ia.mp4` — so a filter reading the
+title alone is blind to exactly the items whose titles tell a viewer nothing
+either. That is how a run of Bosko shorts reached Saturday Morning: Bosko is a
+minstrel caricature, and the only place his name appeared was the filename.
+
+The caricature terms are worth describing, because they are the ones most
+likely to need judgement later. They name characters whose design is the
+caricature (`bosko`, `mammy`, `minstrel`), slurs as whole words so `jap` fires
+and "Japan" does not, and the Censored Eleven by title — the Warner shorts
+withdrawn from distribution in 1968, plus the comparable shorts from other
+studios. What a term list cannot do is see inside a film, and pre-1960
+animation and colonial-era adventure pictures carry plenty that no title
+betrays. The list shortens the odds; it does not clear the shelf.
+
+**`blockIdentifiers`** drops named Archive items outright, for the ones no term
+should have to describe. It is the right tool when a single item is wrong for
+its channel rather than wrong everywhere.
 
 **`blockCollections`** drops an item that belongs to any of the named Archive
 collections, whatever the query asked for. This one is not optional padding: an
@@ -294,9 +315,23 @@ it drops a trailing container extension, strips a leading shelf mark such as
 `JSC-500` or `HQ220`, and reads underscores as spaces. It is deliberately
 conservative: `Rikki-Tikki-Tavi` and `Re-Animator` pass through untouched.
 
+When the uploader's title is only a date, `titleFromFilename` recovers the real
+one from the file beside it, so the guide shows "Harlem Wednesday" rather than
+"1958". A viewer who cannot tell what a programme is cannot decide to skip it.
+It gives up rather than guessing when the filename has no words in it, which is
+what keeps `1776` — a real picture, stored as `393979.mp4` — intact.
+
 `scripts/retitle-catalog.ts` applies the same function to the catalogue already
 on disk, so a change to the rules does not cost a full rebuild. It is
 idempotent, and it writes the files minified exactly as the builder does.
+
+`scripts/prune-catalog.ts` does the same for the block lists: it re-applies
+`blockTerms` and `blockIdentifiers` to the shipped JSON and recounts the index,
+so material that should never have reached the dial does not have to wait two
+hours for a rebuild to leave it. Run it with `--dry-run` first. It sees less
+than the builder does — the shipped files keep the title and filename but not
+the Archive's subject tags or description — so it drops a subset of what a
+rebuild would drop, never a superset.
 
 ## Rights and strict licence mode
 

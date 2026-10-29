@@ -106,7 +106,45 @@
     "mutilator",
     "snuff film",
     "gore",
-    "torture"
+    "torture",
+    "bosko",
+    "congo jazz",
+    "mammy",
+    "minstrel",
+    "blackface",
+    "jap",
+    "japs",
+    "coon",
+    "darkie",
+    "darky",
+    "pickaninny",
+    "pickaninnies",
+    "golliwog",
+    "sambo",
+    "jigaboo",
+    "redskin",
+    "redskins",
+    "squaw",
+    "all this and rabbit stew",
+    "angel puss",
+    "clean pastures",
+    "coal black",
+    "goldilocks and the jivin bears",
+    "half-pint pygmy",
+    "hittin the trail for hallelujah land",
+    "jungle jitters",
+    "sunday go to meetin time",
+    "the isle of pingo pongo",
+    "tin pan alley cats",
+    "uncle tom",
+    "uncle toms",
+    "scrub me mama",
+    "swing wedding",
+    "tokio jokio",
+    "nips the nips",
+    "jungle drums",
+    "snafu",
+    "tarfu"
   ],
   "commercials": {
     "sources": [
@@ -488,5 +526,8 @@
       "maxYear": 1969,
       "maxItems": 700
     }
+  ],
+  "blockIdentifiers": [
+    "1958publicdomainanimation"
   ]
 }

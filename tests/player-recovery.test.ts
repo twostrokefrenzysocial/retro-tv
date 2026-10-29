@@ -62,6 +62,7 @@ function makeDeck() {
   ];
   const segments: string[] = [];
   const faults: string[] = [];
+  const tuning: boolean[] = [];
   let recovered = 0;
 
   const player = new TvPlayer(videos as never, {
@@ -70,9 +71,10 @@ function makeDeck() {
     onRecover: () => {
       recovered += 1;
     },
+    onTuning: (waiting) => tuning.push(waiting),
   });
 
-  return { player, videos, segments, faults, recoveredCount: () => recovered };
+  return { player, videos, segments, faults, tuning, recoveredCount: () => recovered };
 }
 
 describe('player recovery after a dead channel', () => {
@@ -143,5 +145,78 @@ describe('player recovery after a dead channel', () => {
     // Sixty failures must not leave sixty retries pending. The deck runs a
     // handful of timers of its own, so allow for those and no more.
     expect(vi.getTimerCount()).toBeLessThanOrEqual(before + 2);
+  });
+});
+
+/**
+ * The caption that admits the set is waiting on archive.org rather than
+ * broken. It only ever reports the element on screen: the standby buffers
+ * the next programme for a minute before every swap, and reporting that
+ * would leave the caption up almost permanently.
+ */
+describe('tuning caption', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // The deck reaches for window.*; in node the test globals are the timers.
+    (globalThis as { window?: unknown }).window = globalThis;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    delete (globalThis as { window?: unknown }).window;
+  });
+
+  /**
+   * Tuning already raises the caption, because asking archive.org for a file
+   * is the wait it exists to describe. Each of these settles the deck into
+   * playing first, so what it then asserts is the response to the event and
+   * not the leftover state of the tune.
+   */
+  function playingDeck() {
+    const deck = makeDeck();
+    deck.player.tune(makeChannel('tuning'));
+    deck.videos[0].fire('playing');
+    deck.tuning.length = 0;
+    return deck;
+  }
+
+  it('goes up on the first request for a file', () => {
+    const deck = makeDeck();
+    deck.player.tune(makeChannel('tuning'));
+    expect(deck.tuning).toEqual([true]);
+  });
+
+  it('goes up when the active element waits and down when it plays', () => {
+    const deck = playingDeck();
+
+    deck.videos[0].fire('waiting');
+    expect(deck.tuning).toEqual([true]);
+
+    deck.videos[0].fire('playing');
+    expect(deck.tuning).toEqual([true, false]);
+  });
+
+  it('does not repeat itself while the wait goes on', () => {
+    const deck = playingDeck();
+
+    deck.videos[0].fire('waiting');
+    deck.videos[0].fire('waiting');
+    deck.videos[0].fire('waiting');
+    expect(deck.tuning).toEqual([true]);
+  });
+
+  it('ignores the standby element buffering out of sight', () => {
+    const deck = playingDeck();
+
+    deck.videos[1].fire('waiting');
+    expect(deck.tuning).toEqual([]);
+  });
+
+  it('comes down when the set is switched off', () => {
+    const deck = playingDeck();
+
+    deck.videos[0].fire('waiting');
+    deck.player.stop();
+    expect(deck.tuning).toEqual([true, false]);
   });
 });

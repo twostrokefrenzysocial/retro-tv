@@ -68,6 +68,7 @@ export class RetroTv {
       onSegment: (now, channel) => this.handleSegment(now, channel),
       onFault: (reason) => this.showTestCard(reason),
       onRecover: () => this.hideTestCard(),
+      onTuning: (waiting) => this.showTuning(waiting),
     });
     this.player.setVolume(this.prefs.volume);
     this.player.setMuted(this.prefs.muted);
@@ -273,6 +274,12 @@ export class RetroTv {
     this.tv.dataset['fault'] = 'true';
     this.tv.setAttribute('data-fault-reason', reason);
     if (this.prefs.effects.testTone) this.tone.startTone();
+  }
+
+  /** A caption while the set waits on the network, not a fault. */
+  private showTuning(waiting: boolean): void {
+    if (waiting) this.tv.dataset['tuning'] = 'true';
+    else delete this.tv.dataset['tuning'];
   }
 
   private hideTestCard(): void {
