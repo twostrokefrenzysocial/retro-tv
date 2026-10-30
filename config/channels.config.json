@@ -144,7 +144,17 @@
     "nips the nips",
     "jungle drums",
     "snafu",
-    "tarfu"
+    "tarfu",
+    "africa speaks",
+    "sanders of the river",
+    "the savage girl",
+    "white savage",
+    "chinatown after dark",
+    "bird of paradise",
+    "drums of africa",
+    "adventure in iraq",
+    "indian scout",
+    "mr. wong"
   ],
   "commercials": {
     "sources": [
@@ -528,6 +538,7 @@
     }
   ],
   "blockIdentifiers": [
-    "1958publicdomainanimation"
+    "1958publicdomainanimation",
+    "the-green-goddess_1930"
   ]
 }
